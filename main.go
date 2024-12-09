@@ -1,37 +1,47 @@
 package main
 
 import (
+	"didactic_octo_sniffle/app/api"
 	"didactic_octo_sniffle/app/controllers"
 	"didactic_octo_sniffle/app/models"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"log"
 )
 
-func main() {
-	// Connect to SQLite database
+// Initialize the database
+func initDB() *gorm.DB {
 	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("failed to connect to database: %v", err)
+		log.Fatalf("Failed to connect to the database: %v", err)
 	}
-
 	// Migrate the schema
 	err = db.AutoMigrate(models.User{})
 	if err != nil {
 		log.Println(
 			"Database Table User Migration failed!",
 			err)
-		return
+		return nil
 	}
 	err = db.AutoMigrate(models.Post{})
 	if err != nil {
 		log.Println(
 			"Database Table Posts Migration failed!",
 			err)
-		return
+		return nil
 	}
 	log.Println("Database operation completed successfully!")
+	return db
+}
+
+func main() {
+
+	db := initDB()
+	router := gin.Default()
+	// Define the endpoint
+	router.POST("/users", api.CreateUserHandler(db))
 
 	// Create a new user
 	db.Create(&models.User{Name: "Alice"})
@@ -55,7 +65,7 @@ func main() {
 	for _, p := range posts {
 		println("Post:", p.Title, p.Content)
 	}
-	err = controllers.UpdatePost(db, 2, "Hi tiger ", "Hello Tiger World")
+	err := controllers.UpdatePost(db, 2, "Hi tiger ", "Hello Tiger World")
 	if err != nil {
 		fmt.Println("Update Post Failed")
 	}
