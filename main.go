@@ -40,6 +40,9 @@ func main() {
 	router := gin.Default()
 	// Define the endpoint
 	router.POST("/users", api.CreateUserHandler(db))
+	router.GET("/users", api.QueryAllUsersHandler(db))     // Get all users
+	router.GET("/users/:email", api.QueryUserHandler(db))  // Get a user by email
+	router.PUT("/users/:email", api.UpdateUserHandler(db)) // Update a user by email
 
 	// Start the server
 	router.Run(":9090")
