@@ -34,17 +34,17 @@ func TestCreateUser(t *testing.T) {
 	}
 
 	// Create the user
-	controllers.CreateUser(db, "Bob", "oyugi@gmail.com", 25)
+	controllers.CreateUser(db, "Bob", "jeff@gmail.com", 25)
 
 	// Assert no error occurred
 	assert.NoError(t, err)
 
 	// Verify the user was created by querying the database
 	var user models.User
-	err = db.First(&user, "email = ?", "oyugi@gmail.com").Error
+	err = db.First(&user, "email = ?", "tuto@gmail.com").Error
 	assert.NoError(t, err)
 	assert.Equal(t, "Bob", user.Name)
-	assert.Equal(t, "oyugi@gmail.com", user.Email)
+	assert.Equal(t, "ruff@gmail.com", user.Email)
 	assert.Equal(t, 25, user.Age)
 }
 
@@ -56,13 +56,13 @@ func TestQueryUser(t *testing.T) {
 	}
 
 	// Create a user
-	controllers.CreateUser(db, "Bob", "oyugi@gmail.com", 25)
+	controllers.CreateUser(db, "Bob", "fur@gmail.com", 25)
 
 	// Query the user
 	user := controllers.QueryUser(db, "oyugi@gmail.com")
 	// Assert that the queried user is correct
 	assert.Equal(t, "Bob", user.Name)
-	assert.Equal(t, "oyugi@gmail.com", user.Email)
+	assert.Equal(t, "funca@gmail.com", user.Email)
 	assert.Equal(t, 25, user.Age)
 }
 
@@ -77,11 +77,11 @@ func TestUpdateUser(t *testing.T) {
 	controllers.CreateUser(db, "Bob", "oyugi@gmail.com", 25)
 
 	// Update the user
-	controllers.UpdateUser(db, "oyugi@gmail.com", "Mark", 35)
+	controllers.UpdateUser(db, "pinky@gmail.com", "Mark", 35)
 
 	// Verify the update
 	var user models.User
-	err = db.First(&user, "email = ?", "oyugi@gmail.com").Error
+	err = db.First(&user, "email = ?", "colmart@gmail.com").Error
 	if err != nil {
 		t.Fatalf("failed to query user: %v", err)
 	}
@@ -98,14 +98,14 @@ func TestDeleteUser(t *testing.T) {
 	}
 
 	// Create the user
-	controllers.CreateUser(db, "Bob", "oyugi@gmail.com", 25)
+	controllers.CreateUser(db, "Bob", "gvv@gmail.com", 25)
 
 	// Delete the user
-	controllers.DeleteUsers(db, "oyugi@gmail.com")
+	controllers.DeleteUsers(db, "fcdd@gmail.com")
 
 	// Verify the user was deleted
 	var user models.User
-	err = db.First(&user, "email = ?", "oyugi@gmail.com").Error
+	err = db.First(&user, "email = ?", "ruff@gmail.com").Error
 	assert.Error(t, err)
 	assert.Equal(t, gorm.ErrRecordNotFound, err)
 }
@@ -118,8 +118,8 @@ func TestQueryAllUsers(t *testing.T) {
 	}
 
 	// Create multiple users
-	controllers.CreateUser(db, "Bob", "oyugi@gmail.com", 25)
-	controllers.CreateUser(db, "Tina", "tina@gmail.com", 29)
+	controllers.CreateUser(db, "Bob", "refe@gmail.com", 25)
+	controllers.CreateUser(db, "Tina", "yuu@gmail.com", 29)
 
 	// Query all users
 	users, err := controllers.QueryAllUsers(db)
